@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWifiNetworks));
             btnWifiScan = new Button();
             btnback = new Button();
             labelNetworkCount = new Label();
@@ -35,116 +36,103 @@
             ssıd = new ColumnHeader();
             signal = new ColumnHeader();
             security = new ColumnHeader();
-            panel1 = new Panel();
-            labelTitle = new Label();
-            panel1.SuspendLayout();
+            lblScan = new Label();
+            lblHomePage = new Label();
             SuspendLayout();
             // 
             // btnWifiScan
             // 
-            btnWifiScan.BackColor = Color.FromArgb(0, 122, 204);
+            btnWifiScan.BackgroundImage = (Image)resources.GetObject("btnWifiScan.BackgroundImage");
+            btnWifiScan.BackgroundImageLayout = ImageLayout.Center;
             btnWifiScan.FlatAppearance.BorderSize = 0;
             btnWifiScan.FlatStyle = FlatStyle.Flat;
-            btnWifiScan.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnWifiScan.ForeColor = Color.White;
-            btnWifiScan.Location = new Point(22, 416);
+            btnWifiScan.Location = new Point(22, 500);
             btnWifiScan.Name = "btnWifiScan";
-            btnWifiScan.Size = new Size(200, 40);
+            btnWifiScan.Size = new Size(73, 86);
             btnWifiScan.TabIndex = 0;
-            btnWifiScan.Text = "WiFi Ağlarını Tara";
-            btnWifiScan.UseVisualStyleBackColor = false;
+            btnWifiScan.UseVisualStyleBackColor = true;
             btnWifiScan.Click += btnScanWifi_Click;
-            btnWifiScan.MouseEnter += Button_MouseEnter;
-            btnWifiScan.MouseLeave += Button_MouseLeave;
             // 
             // btnback
             // 
-            btnback.BackColor = Color.FromArgb(0, 122, 204);
+            btnback.BackgroundImage = (Image)resources.GetObject("btnback.BackgroundImage");
+            btnback.BackgroundImageLayout = ImageLayout.Center;
             btnback.FlatAppearance.BorderSize = 0;
             btnback.FlatStyle = FlatStyle.Flat;
-            btnback.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnback.ForeColor = Color.White;
-            btnback.Location = new Point(274, 416);
+            btnback.Location = new Point(260, 500);
             btnback.Name = "btnback";
-            btnback.Size = new Size(200, 40);
+            btnback.Size = new Size(73, 86);
             btnback.TabIndex = 1;
-            btnback.Text = "Ana Menüye Dön";
-            btnback.UseVisualStyleBackColor = false;
+            btnback.UseVisualStyleBackColor = true;
             btnback.Click += btnBack_Click;
-            btnback.MouseEnter += Button_MouseEnter;
-            btnback.MouseLeave += Button_MouseLeave;
             // 
             // labelNetworkCount
             // 
             labelNetworkCount.AutoSize = true;
-            labelNetworkCount.Font = new Font("Segoe UI", 10F);
-            labelNetworkCount.ForeColor = Color.White;
-            labelNetworkCount.Location = new Point(22, 87);
+            labelNetworkCount.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            labelNetworkCount.Location = new Point(22, 20);
             labelNetworkCount.Name = "labelNetworkCount";
-            labelNetworkCount.Size = new Size(117, 23);
+            labelNetworkCount.Size = new Size(200, 28);
             labelNetworkCount.TabIndex = 3;
-            labelNetworkCount.Text = "Bulunan Ağ: 0";
+            labelNetworkCount.Text = "Toplam Ağ: 0";
             // 
             // listViewWifiNetworks
             // 
-            listViewWifiNetworks.BackColor = Color.FromArgb(45, 45, 48);
-            listViewWifiNetworks.BorderStyle = BorderStyle.None;
+            listViewWifiNetworks.BackColor = Color.White;
             listViewWifiNetworks.Columns.AddRange(new ColumnHeader[] { ssıd, signal, security });
-            listViewWifiNetworks.Font = new Font("Segoe UI", 10F);
-            listViewWifiNetworks.ForeColor = Color.White;
+            listViewWifiNetworks.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             listViewWifiNetworks.FullRowSelect = true;
             listViewWifiNetworks.GridLines = true;
-            listViewWifiNetworks.Location = new Point(22, 119);
+            listViewWifiNetworks.Location = new Point(22, 60);
             listViewWifiNetworks.Name = "listViewWifiNetworks";
-            listViewWifiNetworks.Size = new Size(452, 264);
+            listViewWifiNetworks.Size = new Size(311, 434);
             listViewWifiNetworks.TabIndex = 4;
             listViewWifiNetworks.UseCompatibleStateImageBehavior = false;
             listViewWifiNetworks.View = View.Details;
             // 
             // ssıd
             // 
-            ssıd.Text = "Ağ Adı (SSID)";
+            ssıd.Text = "Ağ Adı";
             ssıd.Width = 150;
             // 
             // signal
             // 
-            signal.Text = "Sinyal Gücü";
-            signal.Width = 150;
+            signal.Text = "Sinyal";
+            signal.Width = 80;
             // 
             // security
             // 
             security.Text = "Güvenlik";
-            security.Width = 150;
+            security.Width = 80;
             // 
-            // panel1
+            // lblScan
             // 
-            panel1.BackColor = Color.FromArgb(45, 45, 48);
-            panel1.Controls.Add(labelTitle);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(500, 60);
-            panel1.TabIndex = 7;
+            lblScan.AutoSize = true;
+            lblScan.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            lblScan.Location = new Point(24, 589);
+            lblScan.Name = "lblScan";
+            lblScan.Size = new Size(71, 20);
+            lblScan.TabIndex = 5;
+            lblScan.Text = "Ağları Tara";
             // 
-            // labelTitle
+            // lblHomePage
             // 
-            labelTitle.Dock = DockStyle.Fill;
-            labelTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            labelTitle.ForeColor = Color.White;
-            labelTitle.Location = new Point(0, 0);
-            labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(500, 60);
-            labelTitle.TabIndex = 0;
-            labelTitle.Text = "WiFi Ağları";
-            labelTitle.TextAlign = ContentAlignment.MiddleCenter;
+            lblHomePage.AutoSize = true;
+            lblHomePage.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            lblHomePage.Location = new Point(260, 589);
+            lblHomePage.Name = "lblHomePage";
+            lblHomePage.Size = new Size(86, 20);
+            lblHomePage.TabIndex = 6;
+            lblHomePage.Text = "Ana Sayfa";
             // 
             // FormWifiNetworks
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(37, 37, 38);
-            ClientSize = new Size(500, 495);
-            Controls.Add(panel1);
+            BackColor = Color.FromArgb(240, 240, 240);
+            ClientSize = new Size(355, 618);
+            Controls.Add(lblHomePage);
+            Controls.Add(lblScan);
             Controls.Add(listViewWifiNetworks);
             Controls.Add(labelNetworkCount);
             Controls.Add(btnback);
@@ -154,7 +142,6 @@
             Name = "FormWifiNetworks";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "WiFi Ağları";
-            panel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -168,7 +155,7 @@
         private ColumnHeader ssıd;
         private ColumnHeader signal;
         private ColumnHeader security;
-        private Panel panel1;
-        private Label labelTitle;
+        private Label lblScan;
+        private Label lblHomePage;
     }
 }

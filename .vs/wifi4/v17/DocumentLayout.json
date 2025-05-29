@@ -1,0 +1,243 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|c:\\users\\asus\\onedrive\\masa\u00FCst\u00FC\\wifiscaner\\wifi4\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|c:\\users\\asus\\onedrive\\masa\u00FCst\u00FC\\wifiscaner\\wifi4\\connecteddevicesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\connecteddevicesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|c:\\users\\asus\\onedrive\\masa\u00FCst\u00FC\\wifiscaner\\wifi4\\deviceinfoform .designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\deviceinfoform .designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|c:\\users\\asus\\onedrive\\masa\u00FCst\u00FC\\wifiscaner\\wifi4\\formwifinetworks.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\formwifinetworks.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|c:\\users\\asus\\onedrive\\masa\u00FCst\u00FC\\wifiscaner\\wifi4\\mainmenuform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\mainmenuform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|c:\\users\\asus\\onedrive\\masa\u00FCst\u00FC\\wifiscaner\\wifi4\\wifi4.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\wifi4.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\properties\\resources.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\properties\\resources.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\connecteddevicesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\connecteddevicesform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|c:\\users\\asus\\onedrive\\masa\u00FCst\u00FC\\wifiscaner\\wifi4\\connecteddevicesform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\connecteddevicesform.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\connecteddevicesform.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\connecteddevicesform.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\deviceinfoform .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\deviceinfoform .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\formwifinetworks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\formwifinetworks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\mainmenuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\mainmenuform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\deviceinfoform .resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "RelativeMoniker": "D:0:0:{206F8233-88FF-4578-9F8D-ED88C0749C52}|wifi4\\wifi4.csproj|solutionrelative:wifi4\\deviceinfoform .resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FormWifiNetworks.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\FormWifiNetworks.Designer.cs",
+              "RelativeDocumentMoniker": "wifi4\\FormWifiNetworks.Designer.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\FormWifiNetworks.Designer.cs",
+              "RelativeToolTip": "wifi4\\FormWifiNetworks.Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T19:05:46.811Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DeviceInfoForm .Designer.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\DeviceInfoForm .Designer.cs",
+              "RelativeDocumentMoniker": "wifi4\\DeviceInfoForm .Designer.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\DeviceInfoForm .Designer.cs",
+              "RelativeToolTip": "wifi4\\DeviceInfoForm .Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T19:05:32.599Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ConnectedDevicesForm.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.cs",
+              "RelativeDocumentMoniker": "wifi4\\ConnectedDevicesForm.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.cs",
+              "RelativeToolTip": "wifi4\\ConnectedDevicesForm.cs",
+              "ViewState": "AQIAAGcAAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T20:52:18.521Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "wifi4.csproj",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\wifi4.csproj",
+              "RelativeDocumentMoniker": "wifi4\\wifi4.csproj",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\wifi4.csproj",
+              "RelativeToolTip": "wifi4\\wifi4.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-05-28T19:07:04.938Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\Program.cs",
+              "RelativeDocumentMoniker": "wifi4\\Program.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\Program.cs",
+              "RelativeToolTip": "wifi4\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T19:06:59.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainMenuForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\MainMenuForm.Designer.cs",
+              "RelativeDocumentMoniker": "wifi4\\MainMenuForm.Designer.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\MainMenuForm.Designer.cs",
+              "RelativeToolTip": "wifi4\\MainMenuForm.Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T19:06:50.722Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ConnectedDevicesForm.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.Designer.cs",
+              "RelativeDocumentMoniker": "wifi4\\ConnectedDevicesForm.Designer.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.Designer.cs",
+              "RelativeToolTip": "wifi4\\ConnectedDevicesForm.Designer.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T18:46:14.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Resources.resx",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\Properties\\Resources.resx",
+              "RelativeDocumentMoniker": "wifi4\\Properties\\Resources.resx",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\Properties\\Resources.resx",
+              "RelativeToolTip": "wifi4\\Properties\\Resources.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-05-28T14:48:49.954Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ConnectedDevicesForm.cs [Tasar\u0131m]",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.cs",
+              "RelativeDocumentMoniker": "wifi4\\ConnectedDevicesForm.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.cs [Tasar\u0131m]",
+              "RelativeToolTip": "wifi4\\ConnectedDevicesForm.cs [Tasar\u0131m]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T18:34:04.786Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ConnectedDevicesForm.resx",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.resx",
+              "RelativeDocumentMoniker": "wifi4\\ConnectedDevicesForm.resx",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\ConnectedDevicesForm.resx",
+              "RelativeToolTip": "wifi4\\ConnectedDevicesForm.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-05-28T19:04:29.756Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DeviceInfoForm .cs [Tasar\u0131m]",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\DeviceInfoForm .cs",
+              "RelativeDocumentMoniker": "wifi4\\DeviceInfoForm .cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\DeviceInfoForm .cs [Tasar\u0131m]",
+              "RelativeToolTip": "wifi4\\DeviceInfoForm .cs [Tasar\u0131m]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T18:34:31.919Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "MainMenuForm.cs [Tasar\u0131m]",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\MainMenuForm.cs",
+              "RelativeDocumentMoniker": "wifi4\\MainMenuForm.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\MainMenuForm.cs [Tasar\u0131m]",
+              "RelativeToolTip": "wifi4\\MainMenuForm.cs [Tasar\u0131m]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T18:34:37.192Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "FormWifiNetworks.cs [Tasar\u0131m]",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\FormWifiNetworks.cs",
+              "RelativeDocumentMoniker": "wifi4\\FormWifiNetworks.cs",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\FormWifiNetworks.cs [Tasar\u0131m]",
+              "RelativeToolTip": "wifi4\\FormWifiNetworks.cs [Tasar\u0131m]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-28T18:34:35.035Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "DeviceInfoForm .resx",
+              "DocumentMoniker": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\DeviceInfoForm .resx",
+              "RelativeDocumentMoniker": "wifi4\\DeviceInfoForm .resx",
+              "ToolTip": "C:\\Users\\asus\\OneDrive\\Masa\u00FCst\u00FC\\wifiScaner\\wifi4\\DeviceInfoForm .resx",
+              "RelativeToolTip": "wifi4\\DeviceInfoForm .resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-05-28T14:48:11.327Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,388 +1,286 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.NetworkInformation;
-using System.Net;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace wifi4
 {
     public partial class ConnectedDevicesForm : Form
     {
         private Dictionary<string, string> customDeviceNames = new Dictionary<string, string>();
-        private string customNamesFilePath = "custom_device_names.txt";
-        private Color defaultButtonColor = Color.FromArgb(0, 122, 204);
-        private Color hoverButtonColor = Color.FromArgb(0, 102, 184);
-        private CancellationTokenSource? cancellationTokenSource;
-        private List<DeviceInfo> discoveredDevices = new List<DeviceInfo>();
-        private ImageList deviceIcons;
-
-        private class DeviceInfo
-        {
-            public string Name { get; set; } = "Bilinmeyen Cihaz";
-            public string IPAddress { get; set; } = "0.0.0.0";
-            public long PingTime { get; set; }
-            public List<int> OpenPorts { get; set; } = new List<int>();
-            public Panel DevicePanel { get; set; } = null!;
-            public int DeviceType { get; set; } = 0; // 0: Unknown, 1: Computer, 2: Router, 3: Printer, 4: Mobile
-            public string MacAddress { get; set; } = "Bilinmiyor";
-            public string HostName { get; set; } = "Bilinmiyor";
-            public string Manufacturer { get; set; } = "Bilinmiyor";
-        }
+        private string customNamesFilePath;
+        private int deviceCount = 0;
+        private CheckBox chkLocalOnly;
+        private List<(string ip, string mac, string hostname, string vendor, string connectionType, string deviceType)> allDevices = new();
+        private string mac = "";
 
         public ConnectedDevicesForm()
         {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string dir = Path.Combine(appData, "wifi4");
+            Directory.CreateDirectory(dir);
+            customNamesFilePath = Path.Combine(dir, "custom_device_names.txt");
+            
             InitializeComponent();
-            InitializeDeviceIcons();
             LoadCustomDeviceNames();
+            LoadMacVendorCache();
+            SetHoverBorder(btnScan);
+            SetHoverBorder(btnBack);
+            this.BackColor = Color.FromArgb(240, 240, 240);
+            this.Size = new Size(355, 618);
             this.StartPosition = FormStartPosition.CenterScreen;
+
+            // Başlık ve sayaç ortalanmış
+            labelCount.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelCount.ForeColor = Color.FromArgb(0, 122, 204);
+            labelCount.TextAlign = ContentAlignment.MiddleCenter;
+
+            // Cihaz kartları paneli ortalanmış ve genişliği optimize edilmiş
+            flowDevices.Location = new Point(12, 65);
+            flowDevices.Size = new Size(310, 380);
+            flowDevices.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            flowDevices.AutoScroll = true;
+
+            lblDevicesScan.Location = new Point(15, 470);
+            lblHomePage.Location = new Point(235, 470);
+
+            // Alt kısımda iki büyük buton: Cihazları Tara ve Ana Sayfa
+            btnScan.Size = new Size(80, 60);
+            btnScan.Location = new Point(12, 490);
+            btnScan.Font = new Font("Segoe UI Symbol", 32F, FontStyle.Bold);
+            btnScan.Text = "";
+            btnScan.Image = null;
+            btnScan.ImageAlign = ContentAlignment.MiddleCenter;
+            btnScan.FlatStyle = FlatStyle.Flat;
+            btnScan.FlatAppearance.BorderSize = 0;
+            btnScan.FlatAppearance.BorderColor = this.BackColor;
+            btnScan.TabStop = false;
+            btnScan.UseVisualStyleBackColor = false;
+            btnScan.BackColor = Color.FromArgb(240, 240, 240);
+            btnScan.Cursor = Cursors.Hand;
+
+            btnBack.Size = new Size(80, 60);
+            btnBack.Location = new Point(230, 490);
+            btnBack.Font = new Font("Segoe UI Symbol", 32F, FontStyle.Bold);
+            btnBack.Text = "";
+            btnBack.Image = null;
+            btnBack.ImageAlign = ContentAlignment.MiddleCenter;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatAppearance.BorderColor = this.BackColor;
+            btnBack.TabStop = false;
+            btnBack.UseVisualStyleBackColor = false;
+            btnBack.BackColor = Color.FromArgb(240, 240, 240);
+            btnBack.Cursor = Cursors.Hand;
+
+            chkLocalOnly = new CheckBox();
+            chkLocalOnly.Text = "Sadece Yerel Ağ";
+            chkLocalOnly.Location = new Point(12, 40);
+            chkLocalOnly.AutoSize = true;
+            chkLocalOnly.Font = new Font("Segoe UI", 10);
+            chkLocalOnly.Checked = false;
+            chkLocalOnly.CheckedChanged += (s, e) => ShowFilteredDevices();
+            this.Controls.Add(chkLocalOnly);
+
+            try
+            {
+                // Loading spinner ayarları
+                loadingSpinner.Image = Image.FromFile(Path.Combine(Application.StartupPath, "Resources", "g2.gif"));
+                loadingSpinner.SizeMode = PictureBoxSizeMode.Zoom;
+                loadingSpinner.Visible = true;
+
+                // Count spinner ayarları
+                countSpinner.Image = Image.FromFile(Path.Combine(Application.StartupPath, "Resources", "g2.gif"));
+                countSpinner.SizeMode = PictureBoxSizeMode.Zoom;
+                countSpinner.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Loading gif yüklenirken hata oluştu: " + ex.Message);
+            }
+
+            // Başlangıçta spinner'ları gizle
+            HideLoadingSpinner();
+            HideCountSpinner();
         }
 
-        private void InitializeDeviceIcons()
+        private void ShowLoadingSpinner()
         {
-            deviceIcons = new ImageList();
-            deviceIcons.ImageSize = new Size(32, 32);
-            deviceIcons.ColorDepth = ColorDepth.Depth32Bit;
-            
-            // Sadece mevcut ikonları ekle
-            deviceIcons.Images.Add("computer", Properties.Resources.computer);
-            deviceIcons.Images.Add("router", Properties.Resources.router);
-            deviceIcons.Images.Add("printer", Properties.Resources.printer);
-            deviceIcons.Images.Add("mobile", Properties.Resources.mobile);
-            deviceIcons.Images.Add("unknown_device", Properties.Resources.unknown_device);
+            loadingSpinner.Visible = true;
+            loadingSpinner.Location = new Point((this.Width - loadingSpinner.Width) / 2, (this.Height - loadingSpinner.Height) / 2);
+            loadingSpinner.BringToFront();
+        }
+
+        private void HideLoadingSpinner()
+        {
+            loadingSpinner.Visible = false;
+        }
+
+        private void ShowCountSpinner()
+        {
+            countSpinner.Visible = true;
+            countSpinner.Location = new Point(labelCount.Right + 10, labelCount.Top + 2);
+            countSpinner.BringToFront();
+        }
+
+        private void HideCountSpinner()
+        {
+            countSpinner.Visible = false;
+        }
+        private void SetHoverBorder(Button button)
+        {
+            button.MouseEnter += (s, e) =>
+            {
+                button.FlatAppearance.BorderSize = 2;
+                button.FlatAppearance.BorderColor = Color.SteelBlue; // İstediğin rengi kullanabilirsin
+            };
+
+            button.MouseLeave += (s, e) =>
+            {
+                button.FlatAppearance.BorderSize = 0;
+                button.FlatAppearance.BorderColor = this.BackColor;
+            };
         }
 
         private async void btnScan_Click(object sender, EventArgs e)
         {
-            if (btnScan.Text == "Durdur")
-            {
-                cancellationTokenSource?.Cancel();
-                return;
-            }
-
-            btnScan.Text = "Durdur";
-            progressBar.Visible = true;
-            progressBar.Style = ProgressBarStyle.Marquee;
-            labelStatus.Text = "Cihazlar taranıyor...";
             flowDevices.Controls.Clear();
-            discoveredDevices.Clear();
-            labelCount.Text = "Bağlı Cihaz Sayısı: 0";
-            panelDeviceInfo.Visible = false;
+            ShowLoadingSpinner();
+            ShowCountSpinner();
+            labelCount.Text = "Toplam Cihaz Sayısı: ";
+            deviceCount = 0;
 
-            cancellationTokenSource = new CancellationTokenSource();
+            btnScan.Enabled = false;
+            btnBack.Enabled = false;
+            string customName = !string.IsNullOrEmpty(mac) && customDeviceNames.TryGetValue(mac, out var foundName)
+                ? foundName
+                : "Bilinmeyen";
+
             try
             {
-                await ScanNetworkAsync(cancellationTokenSource.Token);
+                
+
+                // 1. Ağ aralığını bul
+                string localIp = GetLocalIPAddress();
+                string baseIp = string.Join(".", localIp.Split('.').Take(3)) + ".";
+                List<string> activeIps = new List<string>();
+                HashSet<string> seenMacs = new HashSet<string>();
+
+                // 2. Tüm IP'lere paralel ping at (daha hızlı ve sınırlı sayıda paralel işlem)
+                var parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 32 };
+                await Task.Run(() =>
+                {
+                    Parallel.For(1, 255, parallelOptions, (i) =>
+                    {
+                        string ip = baseIp + i;
+                        using (System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping())
+                        {
+                            try
+                            {
+                                var reply = ping.Send(ip, 70); // Daha kısa timeout
+                                if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                                {
+                                    lock (activeIps)
+                                        activeIps.Add(ip);
+                                }
+                            }
+                            catch { }
+                        }
+                    });
+                });
+
+                // 3. ARP tablosunu oku
+                string arpOutput = RunCommand("arp", "-a");
+                string[] arpLines = arpOutput.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                var arpDevices = new List<(string ip, string mac)>();
+                foreach (string line in arpLines)
+                {
+                    var match = System.Text.RegularExpressions.Regex.Match(line, @"(?<ip>\d+\.\d+\.\d+\.\d+)\s+([\-\w]+)?\s+(?<mac>([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2})");
+                    if (match.Success)
+                    {
+                        string ip = match.Groups["ip"].Value;
+                        string mac = match.Groups["mac"].Value.ToUpper().Replace(":", "-");
+                        arpDevices.Add((ip, mac));
+                    }
+                }
+
+                // 4. Ping ve ARP sonuçlarını birleştir
+                var allIps = activeIps.Union(arpDevices.Select(d => d.ip)).Distinct().ToList();
+
+                allDevices.Clear();
+                foreach (string ip in allIps)
+                {
+                    string mac = arpDevices.FirstOrDefault(d => d.ip == ip).mac ?? "";
+                    mac = mac.Replace(":", "-").ToUpper();
+                    if (string.IsNullOrWhiteSpace(mac) || seenMacs.Contains(mac))
+                        continue;
+                    seenMacs.Add(mac);
+
+                
+                    string hostname = "Çözümlenemedi";
+
+
+                    string vendor = "Bilinmeyen Üretici";
+                    if (!macVendorCache.ContainsKey(mac))
+                    {
+                        try
+                        {
+                            vendor = await GetVendorFromMacAsync(mac);
+                        }
+                        catch { }
+                    }
+                    else
+                    {
+                        vendor = macVendorCache[mac];
+                    }
+
+                    string connectionType = GetConnectionType(ip);
+                    string deviceType = GetDeviceType(vendor);
+
+                    var deviceTuple = (ip, mac, hostname, vendor, connectionType, deviceType);
+                    allDevices.Add(deviceTuple);
+
+                    if (!chkLocalOnly.Checked || (connectionType != null && connectionType.Trim().ToLower() == "yerel ağ"))
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            AddDeviceCard(ip, mac, hostname, vendor, connectionType, deviceType);
+                            deviceCount++;
+                            if (deviceCount == 1)
+                                HideLoadingSpinner();
+                            countSpinner.Location = new Point(labelCount.Right + 10, labelCount.Top + 2);
+                            labelCount.Text = $"Toplam cihaz sayısı: {deviceCount}";
+                        });
+                    }
+                }
+                labelCount.Text = $"Toplam cihaz sayısı: {deviceCount}";
             }
-            catch (OperationCanceledException)
+            catch (Exception ex)
             {
-                labelStatus.Text = "Tarama durduruldu.";
+                MessageBox.Show("Hata: " + ex.Message);
             }
             finally
             {
-                btnScan.Text = "Cihazları Tara";
-                progressBar.Visible = false;
-                cancellationTokenSource.Dispose();
-                cancellationTokenSource = null;
+                if (deviceCount == 0)
+                    HideLoadingSpinner();
+                HideCountSpinner();
+                btnScan.Enabled = true;
+                btnBack.Enabled = true;
             }
-        }
-
-        private async Task ScanNetworkAsync(CancellationToken cancellationToken)
-        {
-            string localIP = GetLocalIPAddress();
-            string[] ipParts = localIP.Split('.');
-            string baseIP = $"{ipParts[0]}.{ipParts[1]}.{ipParts[2]}.";
-
-            labelStatus.Text = "Ping taraması başlatılıyor...";
-
-            // Paralel ping taraması - daha hızlı tarama için batch işleme
-            var pingTasks = new List<Task<(string ip, bool isActive)>>();
-            const int batchSize = 50; // Her seferde 50 IP adresi tara
-
-            for (int i = 1; i <= 254 && !cancellationToken.IsCancellationRequested; i += batchSize)
-                {
-                var batchTasks = new List<Task<(string ip, bool isActive)>>();
-                for (int j = 0; j < batchSize && i + j <= 254; j++)
-                {
-                    string ipAddress = baseIP + (i + j).ToString();
-                    batchTasks.Add(PingHostAsync(ipAddress));
-                }
-                pingTasks.AddRange(batchTasks);
-                await Task.WhenAll(batchTasks);
-            }
-
-            var results = await Task.WhenAll(pingTasks);
-            var activeIPs = results.Where(r => r.isActive).Select(r => r.ip).ToList();
-
-            if (cancellationToken.IsCancellationRequested) return;
-
-            int totalDevices = activeIPs.Count;
-            discoveredDevices.Clear();
-
-            if (totalDevices == 0)
-            {
-                labelStatus.Text = "Aktif cihaz bulunamadı.";
-                progressBar.Visible = false;
-                return;
-            }
-
-            // Aktif cihazlar için detaylı tarama - daha hızlı tarama için batch işleme
-            var scanTasks = new List<Task>();
-            int completedScans = 0;
-            const int scanBatchSize = 10; // Her seferde 10 cihaz tara
-
-            foreach (var ipAddress in activeIPs)
-            {
-                if (cancellationToken.IsCancellationRequested) break;
-
-                var scanTask = Task.Run(async () =>
-                {
-                    try
-                    {
-                        var deviceInfo = new DeviceInfo { IPAddress = ipAddress };
-
-                        // Ping süresini ölç - timeout süresini 300ms'ye düşürdük
-                        using (Ping ping = new Ping())
-                        {
-                            PingReply reply = await ping.SendPingAsync(ipAddress, 300);
-                            deviceInfo.PingTime = reply.RoundtripTime;
-                        }
-
-                        // Cihaz adını al
-                        try
-                        {
-                            IPHostEntry hostEntry = await Dns.GetHostEntryAsync(ipAddress);
-                            deviceInfo.Name = hostEntry.HostName;
-                        }
-                        catch
-                        {
-                            deviceInfo.Name = "Bilinmeyen Cihaz";
-                        }
-
-                        // Sadece önemli portları tara (80, 443, 8080)
-                        deviceInfo.OpenPorts = await ScanImportantPortsAsync(ipAddress, cancellationToken);
-
-                        // Örnek: device.MacAddress = "00:11:22:33:44:55"; // Gerçekte arp -a çıktısından alınır.
-                        // Örnek: device.HostName = "host1"; // Gerçekte hostname komutundan alınır.
-                        // Örnek: device.Manufacturer = "Üretici A"; // Gerçekte (örneğin SNMP veya başka bir yöntemle) alınabilir.
-
-                        lock (discoveredDevices)
-                        {
-                            discoveredDevices.Add(deviceInfo);
-                            completedScans++;
-                            this.Invoke((MethodInvoker)delegate
-                            {
-                                labelStatus.Text = $"Cihaz Taranıyor ({completedScans}/{totalDevices})";
-                                UpdateDeviceList();
-                                labelCount.Text = $"Bağlı Cihaz Sayısı: {discoveredDevices.Count}";
-                            });
-                        }
-            }
-                    catch { }
-                });
-
-                scanTasks.Add(scanTask);
-            }
-
-            await Task.WhenAll(scanTasks);
-
-            if (!cancellationToken.IsCancellationRequested)
-            {
-                labelStatus.Text = $"Tarama tamamlandı. {discoveredDevices.Count} cihaz bulundu.";
-                await Task.Delay(300); // Bekleme süresini 300ms'ye düşürdük
-                progressBar.Visible = false;
-            }
-        }
-
-        private async Task<(string ip, bool isActive)> PingHostAsync(string ipAddress)
-        {
-            try
-            {
-                using (Ping ping = new Ping())
-                {
-                    PingReply reply = await ping.SendPingAsync(ipAddress, 500); // Timeout süresini 500ms'ye düşürdük
-                    return (ipAddress, reply.Status == IPStatus.Success);
-                }
-            }
-            catch
-            {
-                return (ipAddress, false);
-            }
-        }
-
-        private async Task<List<int>> ScanImportantPortsAsync(string ipAddress, CancellationToken cancellationToken)
-        {
-            var openPorts = new List<int>();
-            var importantPorts = new[] { 80, 443, 8080 }; // Sadece önemli portları tara
-            var tasks = importantPorts.Select(port => Task.Run(async () =>
-        {
-            try
-            {
-                    using (var tcpClient = new TcpClient())
-                {
-                        var connectTask = tcpClient.ConnectAsync(ipAddress, port);
-                        if (await Task.WhenAny(connectTask, Task.Delay(300, cancellationToken)) == connectTask)
-                        {
-                            await connectTask;
-                            openPorts.Add(port);
-                        }
-                }
-            }
-                catch { }
-            }));
-
-            await Task.WhenAll(tasks);
-            return openPorts;
-        }
-
-        private void UpdateDeviceList()
-        {
-            flowDevices.Controls.Clear();
-            foreach (var device in discoveredDevices.OrderBy(d => d.Name))
-            {
-                var panel = CreateDevicePanel(device);
-                device.DevicePanel = panel;
-                flowDevices.Controls.Add(panel);
-            }
-        }
-
-        private Panel CreateDevicePanel(DeviceInfo device)
-        {
-            var panel = new Panel
-            {
-                Width = flowDevices.Width - 40,
-                Height = 70,
-                Margin = new Padding(5),
-                BackColor = Color.FromArgb(45, 45, 48),
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
-            // Device type icon
-            var deviceIcon = new PictureBox
-            {
-                Image = deviceIcons.Images[GetDeviceTypeIcon(device)],
-                Size = new Size(32, 32),
-                Location = new Point(10, 10),
-                SizeMode = PictureBoxSizeMode.StretchImage
-            };
-
-            var nameLabel = new Label
-            {
-                Text = customDeviceNames.ContainsKey(device.IPAddress) 
-                    ? customDeviceNames[device.IPAddress] 
-                    : device.Name,
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Location = new Point(50, 5),
-                AutoSize = true,
-                Cursor = Cursors.Hand
-            };
-            nameLabel.Click += (s, e) => ShowDeviceEditDialog(device, nameLabel);
-
-            var ipLabel = new Label
-            {
-                Text = $"IP: {device.IPAddress}",
-                ForeColor = Color.LightGray,
-                Font = new Font("Segoe UI", 9),
-                Location = new Point(50, 30),
-                AutoSize = true
-            };
-
-            panel.Controls.AddRange(new Control[] { deviceIcon, nameLabel, ipLabel });
-            panel.Click += (s, e) => ShowDeviceDetails(device);
-            deviceIcon.Click += (s, e) => ShowDeviceDetails(device);
-            ipLabel.Click += (s, e) => ShowDeviceDetails(device);
-            panel.Cursor = Cursors.Hand;
-            return panel;
-        }
-
-        private string GetDeviceTypeIcon(DeviceInfo device)
-        {
-            if (device.Name.ToLower().Contains("router") || device.Name.ToLower().Contains("gateway"))
-                return "router";
-            if (device.Name.ToLower().Contains("printer"))
-                return "printer";
-            if (device.Name.ToLower().Contains("android") || device.Name.ToLower().Contains("iphone"))
-                return "mobile";
-            if (device.Name.ToLower().Contains("pc") || device.Name.ToLower().Contains("computer"))
-                return "computer";
-            return "unknown_device";
-        }
-
-        private void ShowDeviceEditDialog(DeviceInfo device, Label nameLabel)
-        {
-            using (var form = new Form())
-            {
-                form.Text = "Cihaz Adını Düzenle";
-                form.Size = new Size(300, 150);
-                form.StartPosition = FormStartPosition.CenterParent;
-                form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.MaximizeBox = false;
-                form.MinimizeBox = false;
-                form.BackColor = Color.FromArgb(37, 37, 38);
-
-                var textBox = new TextBox
-                {
-                    Text = customDeviceNames.ContainsKey(device.IPAddress) 
-                        ? customDeviceNames[device.IPAddress] 
-                        : device.Name,
-                    Location = new Point(20, 20),
-                    Size = new Size(240, 25),
-                    Font = new Font("Segoe UI", 10)
-                };
-
-                var saveButton = new Button
-                {
-                    Text = "Kaydet",
-                    DialogResult = DialogResult.OK,
-                    Location = new Point(100, 60),
-                    Size = new Size(80, 30),
-                    BackColor = Color.FromArgb(0, 122, 204),
-                    ForeColor = Color.White,
-                    FlatStyle = FlatStyle.Flat,
-                    Font = new Font("Segoe UI", 9, FontStyle.Bold)
-                };
-
-                form.Controls.AddRange(new Control[] { textBox, saveButton });
-                form.AcceptButton = saveButton;
-
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    string newName = textBox.Text.Trim();
-                    if (!string.IsNullOrEmpty(newName))
-                    {
-                        customDeviceNames[device.IPAddress] = newName;
-                        nameLabel.Text = newName;
-                        SaveCustomDeviceNames();
-                    }
-                }
-            }
-        }
-
-        private void SaveCustomDeviceNames()
-        {
-            var lines = customDeviceNames.Select(kvp => $"{kvp.Key}|{kvp.Value}");
-            System.IO.File.WriteAllLines(customNamesFilePath, lines);
-        }
-
-        private void ShowDeviceDetails(DeviceInfo device)
-        {
-            labelDeviceName.Text = $"Cihaz Adı (Kısa Ad): {(customDeviceNames.ContainsKey(device.IPAddress) ? customDeviceNames[device.IPAddress] : device.Name)}";
-            labelIPAddress.Text = $"IP Adresi: {device.IPAddress}";
-            labelPingStatus.Text = $"Ping: {device.PingTime}ms";
-            labelOpenPorts.Text = $"Açık Portlar: {string.Join(", ", device.OpenPorts)}";
-            pictureBoxDevice.Image = deviceIcons.Images[GetDeviceTypeIcon(device)];
-            labelMac.Text = $"MAC Adresi: {device.MacAddress}";
-            labelHost.Text = $"Host (Biliniyorsa): {device.HostName}";
-            labelManufacturer.Text = $"Üretici (Biliniyorsa): {device.Manufacturer}";
-            panelDeviceInfo.Visible = true;
         }
 
         private string GetLocalIPAddress()
@@ -390,55 +288,354 @@ namespace wifi4
             var host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (var ip in host.AddressList)
             {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                 {
                     return ip.ToString();
-        }
+                }
             }
-            return "127.0.0.1";
+            return "192.168.1.1";
+        }
+
+        private string GetConnectionType(string ip)
+        {
+            string[] parts = ip.Split('.');
+            if (parts.Length == 4)
+            {
+                int firstOctet = int.Parse(parts[0]);
+                if (firstOctet == 192 && parts[1] == "168")
+                    return "Yerel Ağ";
+                else if (firstOctet == 10)
+                    return "Yerel Ağ";
+                else if (firstOctet == 172 && int.Parse(parts[1]) >= 16 && int.Parse(parts[1]) <= 31)
+                    return "Yerel Ağ";
+            }
+            return "Harici Ağ";
+        }
+
+        private string GetDeviceType(string vendor)
+        {
+            vendor = vendor.ToLower();
+            if (vendor.Contains("apple") || vendor.Contains("iphone") || vendor.Contains("ipad"))
+                return "Apple Cihazı";
+            else if (vendor.Contains("samsung") || vendor.Contains("android"))
+                return "Android Cihazı";
+            else if (vendor.Contains("microsoft") || vendor.Contains("windows"))
+                return "Windows Cihazı";
+            else if (vendor.Contains("router") || vendor.Contains("gateway"))
+                return "Ağ Cihazı";
+            else
+                return "Diğer Cihaz";
+        }
+
+        private string RunCommand(string command, string args)
+        {
+            try
+            {
+                ProcessStartInfo psi = new ProcessStartInfo(command, args)
+                {
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                using (Process process = Process.Start(psi))
+                {
+                    process.WaitForExit();
+                    return process.StandardOutput.ReadToEnd();
+                }
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        private Dictionary<string, string> macVendorCache = new Dictionary<string, string>();
+        private string macVendorCacheFile = "mac_vendors.txt";
+
+        private async Task<string> GetVendorFromMacAsync(string mac)
+        {
+            // Clean up the MAC address
+            mac = mac.Replace(":", "").Replace("-", "").ToUpper();
+
+            // Check the cache first
+            if (macVendorCache.ContainsKey(mac))
+                return macVendorCache[mac];
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "CSharpApp");
+                    string url = $"https://macvendors.co/api/{mac}/json";
+                    var response = await client.GetStringAsync(url);
+
+                    if (!string.IsNullOrWhiteSpace(response))
+                    {
+                        // Cache the result to reduce API calls
+                        macVendorCache[mac] = response;
+                        File.AppendAllLines(macVendorCacheFile, new[] { $"{mac}|{response}" });
+                        return response;
+                    }
+                }
+            }
+            catch
+            {
+                return "Bilinmeyen Üretici";
+            }
+
+            return "Bilinmeyen Üretici";
+        }
+
+        private void LoadMacVendorCache()
+        {
+            if (File.Exists(macVendorCacheFile))
+            {
+                foreach (var line in File.ReadAllLines(macVendorCacheFile))
+                {
+                    var parts = line.Split('|');
+                    if (parts.Length == 2)
+                        macVendorCache[parts[0]] = parts[1];
+                }
+            }
+        }
+
+        private string GetWiFiInterface(string ip)
+        {
+            try
+            {
+                string output = RunCommand("netsh", "wlan show interfaces");
+                string[] lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string line in lines)
+                {
+                    if (line.Contains("Name") && !line.Contains("Description"))
+                    {
+                        return line.Split(':')[1].Trim();
+                    }
+                }
+            }
+            catch { }
+            return "Bilinmiyor";
+        }
+
+        private void AddDeviceCard(string ip, string mac, string hostname, string vendor, string connectionType, string deviceType)
+        {
+            var panel = new Panel
+            {
+                Width = 280,
+                Height = 180,
+                Margin = new Padding(10),
+                Padding = new Padding(15),
+                BackColor = Color.White,
+                Tag = false
+            };
+
+            // MAC adresini normalize et
+            string normMac = mac.Replace(":", "-").ToUpper();
+            string displayName = customDeviceNames.ContainsKey(normMac)
+                ? customDeviceNames[normMac]
+                : "Bilinmeyen Cihaz";
+
+            var iconLabel = new Label
+            {
+                Text = GetDeviceIcon(deviceType),
+                Font = new Font("Segoe UI Symbol", 32),
+                Location = new Point(10, 10),
+                AutoSize = true,
+                BackColor = Color.Transparent
+            };
+
+            var nameLabel = new Label
+            {
+                Text = displayName,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Location = new Point(iconLabel.Right + 5, 15),
+                Size = new Size(panel.Width - (iconLabel.Right + 20), 25),
+                AutoSize = false,
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            var typeLabel = new Label
+            {
+                Text = deviceType,
+                Font = new Font("Segoe UI", 9),
+                ForeColor = Color.Gray,
+                Location = new Point(iconLabel.Right + 5, 40),
+                Size = new Size(panel.Width - (iconLabel.Right + 20), 20),
+                AutoSize = false,
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            var connectionLabel = new Label
+            {
+                Text = $"🌐 {connectionType}",
+                Font = new Font("Segoe UI", 9),
+                Location = new Point(15, 80),
+                Size = new Size(panel.Width - 30, 20),
+                AutoSize = false,
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            var ipLabel = new Label
+            {
+                Text = $"📡 IP: {ip}",
+                Font = new Font("Segoe UI", 9),
+                Location = new Point(15, 105),
+                Size = new Size(panel.Width - 30, 20),
+                AutoSize = false,
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            var macLabel = new Label
+            {
+                Text = $"🔑 MAC: {mac}",
+                Font = new Font("Segoe UI", 9),
+                Location = new Point(15, 130),
+                Size = new Size(panel.Width - 30, 20),
+                AutoSize = false,
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            var vendorLabel = new Label
+            {
+                Text = $"🏭 Üretici: {vendor}",
+                Font = new Font("Segoe UI", 9),
+                Location = new Point(15, 155),
+                Size = new Size(panel.Width - 30, 20),
+                AutoSize = false,
+                BackColor = Color.Transparent,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
+            nameLabel.Cursor = Cursors.Default;
+
+            panel.Controls.AddRange(new Control[] {
+                iconLabel, nameLabel, typeLabel, connectionLabel,
+                ipLabel, macLabel, vendorLabel
+            });
+
+            panel.DoubleClick += (sender, e) =>
+            {
+                var deviceInfoForm = new DeviceInfoForm(
+                    displayName, ip, mac, vendor, hostname, connectionType, deviceType
+                );
+                deviceInfoForm.ShowDialog();
+            };
+
+            flowDevices.Controls.Add(panel);
+        }
+
+
+        private string GetDeviceIcon(string deviceType)
+        {
+            switch (deviceType)
+            {
+                case "Apple Cihazı":
+                    return "🍎";
+                case "Android Cihazı":
+                    return "📱";
+                case "Windows Cihazı":
+                    return "💻";
+                case "Ağ Cihazı":
+                    return "🌐";
+                default:
+                    return "❓";
+            }
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            cancellationTokenSource?.Cancel();
             MainMenuForm mainMenu = new MainMenuForm();
             mainMenu.Show();
-            this.Hide();
+            this.Close();
         }
 
-        private void LoadCustomDeviceNames()
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!System.IO.File.Exists(customNamesFilePath)) return;
-
-            foreach (var line in System.IO.File.ReadAllLines(customNamesFilePath))
+            if (e.CloseReason == CloseReason.UserClosing)
             {
-                var parts = line.Split('|');
-                if (parts.Length == 2)
-                    customDeviceNames[parts[0]] = parts[1];
+                MainMenuForm mainMenu = new MainMenuForm();
+                mainMenu.Show();
+            }
+            base.OnFormClosing(e);
+        }
+
+        // Form yeniden boyutlandırıldığında spinner'ları ortala
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (loadingSpinner != null && loadingSpinner.Visible)
+            {
+                loadingSpinner.Location = new Point((this.Width - loadingSpinner.Width) / 2, (this.Height - loadingSpinner.Height) / 2);
+            }
+            if (countSpinner != null && countSpinner.Visible)
+            {
+                countSpinner.Location = new Point(labelCount.Right + 8);
             }
         }
 
-        private void Button_MouseEnter(object sender, EventArgs e)
+        public void ShowFilteredDevices()
         {
-            if (sender is Button button)
+            flowDevices.Controls.Clear();
+            deviceCount = 0;
+            var filteredDevices = chkLocalOnly.Checked
+                ? allDevices.Where(d => d.connectionType != null && d.connectionType.Trim().ToLower() == "yerel ağ").ToList()
+                : allDevices;
+            foreach (var device in filteredDevices)
             {
-                button.BackColor = hoverButtonColor;
-                button.Cursor = Cursors.Hand;
+                AddDeviceCard(device.ip, device.mac, device.hostname, device.vendor, device.connectionType, device.deviceType);
+                deviceCount++;
+            }
+            labelCount.Text = $"Toplam cihaz sayısı: {deviceCount}";
+        }
+
+        public void LoadCustomDeviceNames()
+        {
+            customDeviceNames.Clear();
+            if (File.Exists(customNamesFilePath))
+            {
+                foreach (var line in File.ReadAllLines(customNamesFilePath))
+                {
+                    var parts = line.Split('|');
+                    if (parts.Length == 2)
+                        customDeviceNames[parts[0]] = parts[1];
+                }
             }
         }
 
-        private void Button_MouseLeave(object sender, EventArgs e)
+        public void SaveCustomDeviceNames()
         {
-            if (sender is Button button)
-            {
-                button.BackColor = defaultButtonColor;
-                button.Cursor = Cursors.Default;
-            }
+            var lines = customDeviceNames.Select(kvp => $"{kvp.Key}|{kvp.Value}");
+            File.WriteAllLines(customNamesFilePath, lines);
         }
 
-        private void labelTitle_Click(object sender, EventArgs e)
+        public void ShowDeviceEditDialog(string mac)
         {
-
+            string normMac = mac.Replace(":", "-").ToUpper();
+            string currentName = customDeviceNames.ContainsKey(normMac) ? customDeviceNames[normMac] : "";
+            Form dialog = new Form { Width = 300, Height = 120, Text = "Cihaz İsmini Değiştir" };
+            TextBox txt = new TextBox { Text = currentName, Left = 10, Top = 10, Width = 260 };
+            Button btn = new Button { Text = "Kaydet", Left = 100, Width = 80, Top = 40, DialogResult = DialogResult.OK };
+            dialog.Controls.Add(txt);
+            dialog.Controls.Add(btn);
+            dialog.AcceptButton = btn;
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string newName = txt.Text.Trim();
+                if (!string.IsNullOrEmpty(newName))
+                {
+                    customDeviceNames[normMac] = newName;
+                    SaveCustomDeviceNames();
+                    LoadCustomDeviceNames();
+                    ShowFilteredDevices();
+                }
+            }
         }
     }
 }

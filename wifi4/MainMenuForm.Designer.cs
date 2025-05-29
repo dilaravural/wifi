@@ -33,84 +33,69 @@
             btnConnectedDevices = new Button();
             labelWifi = new Label();
             labelDevices = new Label();
-            labelTitle = new Label();
-            panel1 = new Panel();
-            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // btnWifiScan
             // 
-            btnWifiScan.BackColor = Color.FromArgb(0, 122, 204);
+            btnWifiScan.BackColor = Color.FromArgb(240, 240, 240);
             btnWifiScan.FlatAppearance.BorderSize = 0;
             btnWifiScan.FlatStyle = FlatStyle.Flat;
-            btnWifiScan.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnWifiScan.ForeColor = Color.White;
-            btnWifiScan.Location = new Point(50, 150);
+            btnWifiScan.Location = new Point(22, 70);
             btnWifiScan.Name = "btnWifiScan";
-            btnWifiScan.Size = new Size(400, 80);
+            btnWifiScan.Size = new Size(311, 60);
             btnWifiScan.TabIndex = 0;
-            btnWifiScan.Text = "WiFi Ağlarını Tara";
-            btnWifiScan.UseVisualStyleBackColor = false;
+            btnWifiScan.UseVisualStyleBackColor = true;
             btnWifiScan.Click += btnWifiScan_Click;
-            btnWifiScan.MouseEnter += Button_MouseEnter;
-            btnWifiScan.MouseLeave += Button_MouseLeave;
             // 
             // btnConnectedDevices
             // 
-            btnConnectedDevices.BackColor = Color.FromArgb(0, 122, 204);
+            btnConnectedDevices.BackColor = Color.FromArgb(240, 240, 240);
             btnConnectedDevices.FlatAppearance.BorderSize = 0;
             btnConnectedDevices.FlatStyle = FlatStyle.Flat;
-            btnConnectedDevices.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnConnectedDevices.ForeColor = Color.White;
-            btnConnectedDevices.Location = new Point(50, 280);
+            btnConnectedDevices.Location = new Point(22, 150);
             btnConnectedDevices.Name = "btnConnectedDevices";
-            btnConnectedDevices.Size = new Size(400, 80);
+            btnConnectedDevices.Size = new Size(311, 60);
             btnConnectedDevices.TabIndex = 1;
-            btnConnectedDevices.Text = "Bağlı Cihazları Görüntüle";
-            btnConnectedDevices.UseVisualStyleBackColor = false;
+            btnConnectedDevices.UseVisualStyleBackColor = true;
             btnConnectedDevices.Click += btnConnectedDevices_Click;
-            btnConnectedDevices.MouseEnter += Button_MouseEnter;
-            btnConnectedDevices.MouseLeave += Button_MouseLeave;
             // 
-            // labelTitle
+            // labelWifi
             // 
-            labelTitle.AutoSize = false;
-            labelTitle.Dock = DockStyle.Top;
-            labelTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            labelTitle.ForeColor = Color.White;
-            labelTitle.Location = new Point(0, 0);
-            labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(500, 60);
-            labelTitle.TabIndex = 4;
-            labelTitle.Text = "WiFi Ağ Tarayıcı";
-            labelTitle.TextAlign = ContentAlignment.MiddleCenter;
+            labelWifi.AutoSize = true;
+            labelWifi.Font = new Font("Segoe UI", 9F);
+            labelWifi.Location = new Point(22, 47);
+            labelWifi.Name = "labelWifi";
+            labelWifi.Size = new Size(82, 20);
+            labelWifi.TabIndex = 2;
+            labelWifi.Text = "WiFi Ağları";
             // 
-            // panel1
+            // labelDevices
             // 
-            panel1.BackColor = Color.FromArgb(45, 45, 48);
-            panel1.Controls.Add(labelTitle);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(500, 60);
-            panel1.TabIndex = 5;
+            labelDevices.AutoSize = true;
+            labelDevices.Font = new Font("Segoe UI", 9F);
+            labelDevices.Location = new Point(22, 127);
+            labelDevices.Name = "labelDevices";
+            labelDevices.Size = new Size(100, 20);
+            labelDevices.TabIndex = 3;
+            labelDevices.Text = "Bağlı Cihazlar";
             // 
             // MainMenuForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(37, 37, 38);
-            ClientSize = new Size(500, 400);
-            Controls.Add(panel1);
+            BackColor = Color.FromArgb(240, 240, 240);
+            ClientSize = new Size(355, 400);
+            Controls.Add(labelDevices);
+            Controls.Add(labelWifi);
             Controls.Add(btnConnectedDevices);
             Controls.Add(btnWifiScan);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "MainMenuForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "WiFi Ağ Tarayıcı";
-            panel1.ResumeLayout(false);
+            Text = "WiFi Yönetimi";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -119,7 +104,5 @@
         private Button btnConnectedDevices;
         private Label labelWifi;
         private Label labelDevices;
-        private Label labelTitle;
-        private Panel panel1;
     }
 }

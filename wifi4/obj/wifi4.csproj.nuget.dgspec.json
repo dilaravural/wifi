@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifi\\wifiScaner\\wifi4\\wifi4.csproj": {}
+    "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifiScaner\\wifi4\\wifi4.csproj": {}
   },
   "projects": {
-    "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifi\\wifiScaner\\wifi4\\wifi4.csproj": {
+    "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifiScaner\\wifi4\\wifi4.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifi\\wifiScaner\\wifi4\\wifi4.csproj",
+        "projectUniqueName": "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifiScaner\\wifi4\\wifi4.csproj",
         "projectName": "wifi4",
-        "projectPath": "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifi\\wifiScaner\\wifi4\\wifi4.csproj",
+        "projectPath": "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifiScaner\\wifi4\\wifi4.csproj",
         "packagesPath": "C:\\Users\\asus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifi\\wifiScaner\\wifi4\\obj\\",
+        "outputPath": "C:\\Users\\asus\\OneDrive\\Masaüstü\\wifiScaner\\wifi4\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,12 @@
       "frameworks": {
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
+          "dependencies": {
+            "SharpPcap": {
+              "target": "Package",
+              "version": "[6.2.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

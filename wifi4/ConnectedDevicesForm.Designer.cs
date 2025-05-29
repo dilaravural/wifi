@@ -28,253 +28,126 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectedDevicesForm));
             btnScan = new Button();
             flowDevices = new FlowLayoutPanel();
             labelCount = new Label();
             btnBack = new Button();
-            panel1 = new Panel();
-            labelTitle = new Label();
-            progressBar = new ProgressBar();
-            labelStatus = new Label();
-            panelDeviceInfo = new Panel();
-            pictureBoxDevice = new PictureBox();
-            labelOpenPorts = new Label();
-            labelPingStatus = new Label();
-            labelIPAddress = new Label();
-            labelDeviceName = new Label();
-            labelMac = new Label();
-            labelHost = new Label();
-            labelManufacturer = new Label();
-            panel1.SuspendLayout();
-            panelDeviceInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxDevice).BeginInit();
+            lblDevicesScan = new Label();
+            lblHomePage = new Label();
+            loadingSpinner = new PictureBox();
+            countSpinner = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)loadingSpinner).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)countSpinner).BeginInit();
             SuspendLayout();
             // 
             // btnScan
             // 
-            btnScan.BackColor = Color.FromArgb(0, 122, 204);
+            btnScan.BackgroundImage = Properties.Resources.icons8_multiple_devices_50;
+            btnScan.BackgroundImageLayout = ImageLayout.Center;
             btnScan.FlatAppearance.BorderSize = 0;
             btnScan.FlatStyle = FlatStyle.Flat;
-            btnScan.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnScan.ForeColor = Color.White;
-            btnScan.Location = new Point(47, 618);
+            btnScan.Location = new Point(12, 530);
             btnScan.Name = "btnScan";
-            btnScan.Size = new Size(158, 47);
+            btnScan.Size = new Size(92, 76);
             btnScan.TabIndex = 0;
-            btnScan.Text = "Cihazları Tara";
-            btnScan.UseVisualStyleBackColor = false;
+            btnScan.UseVisualStyleBackColor = true;
             btnScan.Click += btnScan_Click;
-            btnScan.MouseEnter += Button_MouseEnter;
-            btnScan.MouseLeave += Button_MouseLeave;
             // 
             // flowDevices
             // 
             flowDevices.AutoScroll = true;
-            flowDevices.BackColor = Color.FromArgb(45, 45, 48);
-            flowDevices.Location = new Point(47, 87);
+            flowDevices.BackColor = Color.FromArgb(240, 240, 240);
+            flowDevices.Location = new Point(12, 58);
             flowDevices.Name = "flowDevices";
             flowDevices.Padding = new Padding(10);
-            flowDevices.Size = new Size(427, 336);
+            flowDevices.Size = new Size(337, 466);
             flowDevices.TabIndex = 1;
             // 
             // labelCount
             // 
             labelCount.AutoSize = true;
-            labelCount.Font = new Font("Segoe UI", 10F);
-            labelCount.ForeColor = Color.White;
-            labelCount.Location = new Point(47, 51);
+            labelCount.Font = new Font("Segoe UI", 12F);
+            labelCount.Location = new Point(12, 18);
             labelCount.Name = "labelCount";
-            labelCount.Size = new Size(158, 23);
+            labelCount.Size = new Size(207, 28);
             labelCount.TabIndex = 2;
-            labelCount.Text = "Bağlı Cihaz Sayısı: 0";
+            labelCount.Text = "Toplam Cihaz Sayısı : 0";
             // 
             // btnBack
             // 
-            btnBack.BackColor = Color.FromArgb(0, 122, 204);
+            btnBack.BackgroundImage = (Image)resources.GetObject("btnBack.BackgroundImage");
+            btnBack.BackgroundImageLayout = ImageLayout.Center;
             btnBack.FlatAppearance.BorderSize = 0;
             btnBack.FlatStyle = FlatStyle.Flat;
-            btnBack.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(313, 618);
+            btnBack.Location = new Point(207, 530);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(161, 47);
+            btnBack.Size = new Size(92, 76);
             btnBack.TabIndex = 3;
-            btnBack.Text = "Ana Menüye Dön";
-            btnBack.UseVisualStyleBackColor = false;
+            btnBack.UseVisualStyleBackColor = true;
             btnBack.Click += btnBack_Click;
-            btnBack.MouseEnter += Button_MouseEnter;
-            btnBack.MouseLeave += Button_MouseLeave;
             // 
-            // panel1
+            // lblDevicesScan
             // 
-            panel1.BackColor = Color.FromArgb(45, 45, 48);
-            panel1.Controls.Add(labelTitle);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(527, 38);
-            panel1.TabIndex = 6;
+            lblDevicesScan.AutoSize = true;
+            lblDevicesScan.Font = new Font("Segoe UI", 9F);
+            lblDevicesScan.Location = new Point(7, 609);
+            lblDevicesScan.Name = "lblDevicesScan";
+            lblDevicesScan.Size = new Size(97, 20);
+            lblDevicesScan.TabIndex = 4;
+            lblDevicesScan.Text = "Cihazları Tara";
             // 
-            // labelTitle
+            // lblHomePage
             // 
-            labelTitle.Dock = DockStyle.Fill;
-            labelTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            labelTitle.ForeColor = Color.White;
-            labelTitle.Location = new Point(0, 0);
-            labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(527, 38);
-            labelTitle.TabIndex = 0;
-            labelTitle.Text = "Bağlı Cihazlar";
-            labelTitle.TextAlign = ContentAlignment.MiddleCenter;
-            labelTitle.Click += labelTitle_Click;
+            lblHomePage.AutoSize = true;
+            lblHomePage.Font = new Font("Segoe UI", 9F);
+            lblHomePage.Location = new Point(224, 609);
+            lblHomePage.Name = "lblHomePage";
+            lblHomePage.Size = new Size(75, 20);
+            lblHomePage.TabIndex = 5;
+            lblHomePage.Text = "Ana Sayfa";
             // 
-            // progressBar
+            // loadingSpinner
             // 
-            progressBar.Location = new Point(47, 442);
-            progressBar.MarqueeAnimationSpeed = 30;
-            progressBar.Name = "progressBar";
-            progressBar.Size = new Size(427, 19);
-            progressBar.Style = ProgressBarStyle.Marquee;
-            progressBar.TabIndex = 10;
-            progressBar.Visible = false;
+            loadingSpinner.BackColor = Color.Transparent;
+            loadingSpinner.Location = new Point(20, 380);
+            loadingSpinner.Name = "loadingSpinner";
+            loadingSpinner.Size = new Size(40, 40);
+            loadingSpinner.SizeMode = PictureBoxSizeMode.Zoom;
+            loadingSpinner.TabIndex = 6;
+            loadingSpinner.TabStop = false;
             // 
-            // labelStatus
+            // countSpinner
             // 
-            labelStatus.AutoSize = true;
-            labelStatus.Font = new Font("Segoe UI", 9F);
-            labelStatus.ForeColor = Color.White;
-            labelStatus.Location = new Point(47, 426);
-            labelStatus.Name = "labelStatus";
-            labelStatus.Size = new Size(0, 20);
-            labelStatus.TabIndex = 8;
-            // 
-            // panelDeviceInfo
-            // 
-            panelDeviceInfo.BackColor = Color.FromArgb(45, 45, 48);
-            panelDeviceInfo.BorderStyle = BorderStyle.FixedSingle;
-            panelDeviceInfo.Controls.Add(pictureBoxDevice);
-            panelDeviceInfo.Controls.Add(labelOpenPorts);
-            panelDeviceInfo.Controls.Add(labelPingStatus);
-            panelDeviceInfo.Controls.Add(labelIPAddress);
-            panelDeviceInfo.Controls.Add(labelDeviceName);
-            panelDeviceInfo.Controls.Add(labelMac);
-            panelDeviceInfo.Controls.Add(labelHost);
-            panelDeviceInfo.Controls.Add(labelManufacturer);
-            panelDeviceInfo.Location = new Point(47, 477);
-            panelDeviceInfo.Name = "panelDeviceInfo";
-            panelDeviceInfo.Size = new Size(427, 121);
-            panelDeviceInfo.TabIndex = 9;
-            panelDeviceInfo.Visible = false;
-            // 
-            // pictureBoxDevice
-            // 
-            pictureBoxDevice.Location = new Point(10, 10);
-            pictureBoxDevice.Name = "pictureBoxDevice";
-            pictureBoxDevice.Size = new Size(40, 40);
-            pictureBoxDevice.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBoxDevice.TabIndex = 4;
-            pictureBoxDevice.TabStop = false;
-            // 
-            // labelOpenPorts
-            // 
-            labelOpenPorts.AutoSize = true;
-            labelOpenPorts.Font = new Font("Segoe UI", 9F);
-            labelOpenPorts.ForeColor = Color.White;
-            labelOpenPorts.Location = new Point(300, 33);
-            labelOpenPorts.Name = "labelOpenPorts";
-            labelOpenPorts.Size = new Size(87, 20);
-            labelOpenPorts.TabIndex = 3;
-            labelOpenPorts.Text = "Açık Portlar:";
-            // 
-            // labelPingStatus
-            // 
-            labelPingStatus.AutoSize = true;
-            labelPingStatus.Font = new Font("Segoe UI", 9F);
-            labelPingStatus.ForeColor = Color.Lime;
-            labelPingStatus.Location = new Point(300, 10);
-            labelPingStatus.Name = "labelPingStatus";
-            labelPingStatus.Size = new Size(72, 20);
-            labelPingStatus.TabIndex = 2;
-            labelPingStatus.Text = "Ping: 5ms";
-            // 
-            // labelIPAddress
-            // 
-            labelIPAddress.AutoSize = true;
-            labelIPAddress.Font = new Font("Segoe UI", 9F);
-            labelIPAddress.ForeColor = Color.White;
-            labelIPAddress.Location = new Point(60, 33);
-            labelIPAddress.Name = "labelIPAddress";
-            labelIPAddress.Size = new Size(70, 20);
-            labelIPAddress.TabIndex = 1;
-            labelIPAddress.Text = "IP Adresi:";
-            // 
-            // labelDeviceName
-            // 
-            labelDeviceName.AutoSize = true;
-            labelDeviceName.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            labelDeviceName.ForeColor = Color.White;
-            labelDeviceName.Location = new Point(60, 10);
-            labelDeviceName.Name = "labelDeviceName";
-            labelDeviceName.Size = new Size(91, 23);
-            labelDeviceName.TabIndex = 0;
-            labelDeviceName.Text = "Cihaz Adı:";
-            // 
-            // labelMac
-            // 
-            labelMac.AutoSize = true;
-            labelMac.Font = new Font("Segoe UI", 9F);
-            labelMac.ForeColor = Color.White;
-            labelMac.Location = new Point(60, 50);
-            labelMac.Name = "labelMac";
-            labelMac.Size = new Size(90, 20);
-            labelMac.TabIndex = 5;
-            labelMac.Text = "MAC Adresi:";
-            // 
-            // labelHost
-            // 
-            labelHost.AutoSize = true;
-            labelHost.Font = new Font("Segoe UI", 9F);
-            labelHost.ForeColor = Color.White;
-            labelHost.Location = new Point(60, 70);
-            labelHost.Name = "labelHost";
-            labelHost.Size = new Size(125, 20);
-            labelHost.TabIndex = 6;
-            labelHost.Text = "Host (Biliniyorsa):";
-            // 
-            // labelManufacturer
-            // 
-            labelManufacturer.AutoSize = true;
-            labelManufacturer.Font = new Font("Segoe UI", 9F);
-            labelManufacturer.ForeColor = Color.White;
-            labelManufacturer.Location = new Point(60, 90);
-            labelManufacturer.Name = "labelManufacturer";
-            labelManufacturer.Size = new Size(137, 20);
-            labelManufacturer.TabIndex = 7;
-            labelManufacturer.Text = "Üretici (Biliniyorsa):";
+            countSpinner.BackColor = Color.Transparent;
+            countSpinner.Location = new Point(224, -7);
+            countSpinner.Name = "countSpinner";
+            countSpinner.Size = new Size(74, 59);
+            countSpinner.SizeMode = PictureBoxSizeMode.Zoom;
+            countSpinner.TabIndex = 7;
+            countSpinner.TabStop = false;
             // 
             // ConnectedDevicesForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(37, 37, 38);
-            ClientSize = new Size(527, 698);
-            Controls.Add(panelDeviceInfo);
-            Controls.Add(labelStatus);
-            Controls.Add(progressBar);
-            Controls.Add(panel1);
+            BackColor = Color.FromArgb(240, 240, 240);
+            ClientSize = new Size(361, 638);
+            Controls.Add(lblHomePage);
+            Controls.Add(lblDevicesScan);
             Controls.Add(btnScan);
             Controls.Add(labelCount);
             Controls.Add(btnBack);
             Controls.Add(flowDevices);
+            Controls.Add(loadingSpinner);
+            Controls.Add(countSpinner);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "ConnectedDevicesForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Bağlı Cihazlar";
-            panel1.ResumeLayout(false);
-            panelDeviceInfo.ResumeLayout(false);
-            panelDeviceInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxDevice).EndInit();
+            ((System.ComponentModel.ISupportInitialize)loadingSpinner).EndInit();
+            ((System.ComponentModel.ISupportInitialize)countSpinner).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -285,18 +158,9 @@
         private FlowLayoutPanel flowDevices;
         private Label labelCount;
         private Button btnBack;
-        private Panel panel1;
-        private Label labelTitle;
-        private ProgressBar progressBar;
-        private Label labelStatus;
-        private Panel panelDeviceInfo;
-        private Label labelDeviceName;
-        private Label labelIPAddress;
-        private Label labelPingStatus;
-        private Label labelOpenPorts;
-        private PictureBox pictureBoxDevice;
-        private Label labelMac;
-        private Label labelHost;
-        private Label labelManufacturer;
+        private Label lblDevicesScan;
+        private Label lblHomePage;
+        private System.Windows.Forms.PictureBox loadingSpinner;
+        private System.Windows.Forms.PictureBox countSpinner;
     }
 }

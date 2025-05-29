@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("wifi4")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1e12d650e591d988f1ce71fd1a18e599c4547cdd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87d853e81bddb14d8276f8371e7855ddd50a9f86")]
 [assembly: System.Reflection.AssemblyProductAttribute("wifi4")]
 [assembly: System.Reflection.AssemblyTitleAttribute("wifi4")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

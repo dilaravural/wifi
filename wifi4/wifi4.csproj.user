@@ -4,6 +4,9 @@
     <Compile Update="ConnectedDevicesForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="DeviceInfoForm .cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="FormWifiNetworks.cs">
       <SubType>Form</SubType>
     </Compile>

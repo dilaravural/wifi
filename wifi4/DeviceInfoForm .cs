@@ -20,6 +20,7 @@ namespace wifi4
         private string deviceIp;
         private Panel? cardPanel;
         private Label? lblPortsValue;
+        private Button? btnScanPorts;
 
         public DeviceInfoForm(string deviceName, string ip, string mac, string vendor, string hostname, string connectionType, string deviceType)
         {
@@ -352,6 +353,7 @@ namespace wifi4
             };
             btnScanPorts.FlatAppearance.BorderSize = 0;
             cardPanel.Controls.Add(btnScanPorts);
+            this.btnScanPorts = btnScanPorts;
 
             btnRename.Click += BtnRename_Click;
 
@@ -382,28 +384,43 @@ namespace wifi4
 
             btnScanPorts.Click += async (s, e) =>
             {
-                btnScanPorts.Enabled = false;
-                if (lblPortsValue != null)
-                    lblPortsValue.Text = "Taranıyor...";
-                try
+                var result = MessageBox.Show(
+                    "Port tarama yöntemini seçin:\n\n" +
+                    "Evet = En yaygın 30 portu tara\n" +
+                    "Hayır = Özel port aralığı belirle",
+                    "Port Tarama",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
                 {
-                    var openPorts = await ScanCommonPortsAsync(ip);
+                    btnScanPorts.Enabled = false;
                     if (lblPortsValue != null)
+                        lblPortsValue.Text = "Taranıyor...";
+                    try
                     {
-                        if (openPorts.Count == 0)
-                            lblPortsValue.Text = "Açık port bulunamadı.";
-                        else
-                            lblPortsValue.Text = string.Join(", ", openPorts);
+                        var openPorts = await ScanCommonPortsAsync(ip);
+                        if (lblPortsValue != null)
+                        {
+                            if (openPorts.Count == 0)
+                                lblPortsValue.Text = "Açık port bulunamadı.";
+                            else
+                                lblPortsValue.Text = string.Join(", ", openPorts);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (lblPortsValue != null)
+                            lblPortsValue.Text = "Hata: " + ex.Message;
+                    }
+                    finally
+                    {
+                        btnScanPorts.Enabled = true;
                     }
                 }
-                catch (Exception ex)
+                else if (result == DialogResult.No)
                 {
-                    if (lblPortsValue != null)
-                        lblPortsValue.Text = "Hata: " + ex.Message;
-                }
-                finally
-                {
-                    btnScanPorts.Enabled = true;
+                    ShowPortRangeDialog(ip);
                 }
             };
         }
@@ -601,29 +618,156 @@ namespace wifi4
         // Port tarama fonksiyonu
         private async Task<List<int>> ScanCommonPortsAsync(string ip)
         {
-            int[] ports = { 20, 21, 22, 23, 25, 53, 80, 110, 139, 143, 443, 445, 3389, 8080 };
+            // En yaygın 30 port
+            int[] commonPorts = {
+                20, 21, 22, 23, 25, 53, 80, 110, 139, 143, 443, 445, 3389, 8080,
+                3306, 5432, 27017, 1433, 1521, 6379, 9200, 9300, 11211, 2181,
+                5000, 5001, 8443, 8888, 9000, 9090
+            };
+            return await ScanPortsAsync(ip, commonPorts);
+        }
+
+        private async Task<List<int>> ScanPortRangeAsync(string ip, int startPort, int endPort)
+        {
+            var ports = Enumerable.Range(startPort, endPort - startPort + 1).ToArray();
+            return await ScanPortsAsync(ip, ports);
+        }
+
+        private async Task<List<int>> ScanPortsAsync(string ip, int[] ports)
+        {
             var openPorts = new List<int>();
-            var tasks = ports.Select(async port =>
+            var tasks = new List<Task>();
+
+            foreach (int port in ports)
             {
-                try
+                tasks.Add(Task.Run(async () =>
                 {
-                    using (var client = new System.Net.Sockets.TcpClient())
+                    try
                     {
-                        var connectTask = client.ConnectAsync(ip, port);
-                        var timeoutTask = Task.Delay(400);
-                        var completed = await Task.WhenAny(connectTask, timeoutTask);
-                        if (completed == connectTask && client.Connected)
+                        using (var client = new System.Net.Sockets.TcpClient())
                         {
-                            lock (openPorts)
-                                openPorts.Add(port);
+                            var connectTask = client.ConnectAsync(ip, port);
+                            var timeoutTask = Task.Delay(400);
+                            var completed = await Task.WhenAny(connectTask, timeoutTask);
+                            if (completed == connectTask && client.Connected)
+                            {
+                                lock (openPorts)
+                                    openPorts.Add(port);
+                            }
                         }
                     }
-                }
-                catch { }
-            });
+                    catch { }
+                }));
+            }
+
             await Task.WhenAll(tasks);
             openPorts.Sort();
             return openPorts;
+        }
+
+        private void ShowPortRangeDialog(string ip)
+        {
+            var dialog = new Form
+            {
+                Width = 360,
+                Height = 200,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterParent,
+                Text = "Port Aralığı Tarama"
+            };
+
+            var lblStartPort = new Label
+            {
+                Text = "Başlangıç Portu:",
+                Location = new Point(20, 20),
+                AutoSize = true
+            };
+
+            var txtStartPort = new TextBox
+            {
+                Location = new Point(120, 17),
+                Width = 200
+            };
+
+            var lblEndPort = new Label
+            {
+                Text = "Bitiş Portu:",
+                Location = new Point(20, 50),
+                AutoSize = true
+            };
+
+            var txtEndPort = new TextBox
+            {
+                Location = new Point(120, 47),
+                Width = 200
+            };
+
+            var btnScan = new Button
+            {
+                Text = "Taramayı Başlat",
+                Width = 120,
+                Height = 40,
+                Location = new Point(120, 90),
+                DialogResult = DialogResult.OK
+            };
+
+            dialog.Controls.AddRange(new Control[] { lblStartPort, txtStartPort, lblEndPort, txtEndPort, btnScan });
+            dialog.AcceptButton = btnScan;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                if (int.TryParse(txtStartPort.Text, out int startPort) && 
+                    int.TryParse(txtEndPort.Text, out int endPort))
+                {
+                    if (startPort > 0 && endPort <= 65535 && startPort <= endPort)
+                    {
+                        if (btnScanPorts != null)
+                            btnScanPorts.Enabled = false;
+                        if (lblPortsValue != null)
+                            lblPortsValue.Text = "Taranıyor...";
+
+                        Task.Run(async () =>
+                        {
+                            try
+                            {
+                                var openPorts = await ScanPortRangeAsync(ip, startPort, endPort);
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    if (lblPortsValue != null)
+                                    {
+                                        if (openPorts.Count == 0)
+                                            lblPortsValue.Text = "Açık port bulunamadı.";
+                                        else
+                                            lblPortsValue.Text = string.Join(", ", openPorts);
+                                    }
+                                    if (btnScanPorts != null)
+                                        btnScanPorts.Enabled = true;
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    if (lblPortsValue != null)
+                                        lblPortsValue.Text = "Hata: " + ex.Message;
+                                    if (btnScanPorts != null)
+                                        btnScanPorts.Enabled = true;
+                                });
+                            }
+                        });
+                    }
+                    else
+                    {
+                        MessageBox.Show("Geçersiz port aralığı! Portlar 1-65535 arasında olmalı ve başlangıç portu bitiş portundan küçük olmalıdır.",
+                            "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Lütfen geçerli port numaraları girin!",
+                        "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

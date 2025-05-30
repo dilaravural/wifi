@@ -186,8 +186,14 @@ namespace wifi4
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            MainMenuForm mainMenu = new MainMenuForm();
-            mainMenu.Show();
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form is MainMenuForm)
+                {
+                    form.Show();
+                    break;
+                }
+            }
             this.Close();
         }
 
@@ -195,8 +201,14 @@ namespace wifi4
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                MainMenuForm mainMenu = new MainMenuForm();
-                mainMenu.Show();
+                foreach (Form form in Application.OpenForms)
+                {
+                    if (form is MainMenuForm)
+                    {
+                        form.Show();
+                        break;
+                    }
+                }
             }
             base.OnFormClosing(e);
         }
